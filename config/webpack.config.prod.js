@@ -336,16 +336,23 @@ module.exports = {
           // files. If you use code splitting, async bundles will have their own separate CSS chunk file.
           // By default we support CSS Modules with the extension .module.css
           {
-            test: cssRegex,
+            test: /\.(?:le|c)ss$/,
             exclude: cssModuleRegex,
-            loader: getStyleLoaders({
-              importLoaders: 1,
-              sourceMap: shouldUseSourceMap,
-            }),
-            // Don't consider CSS imports dead code even if the
-            // containing package claims to have no side effects.
-            // Remove this when webpack adds a warning or an error for this.
-            // See https://github.com/webpack/webpack/issues/6571
+            use:[
+              require.resolve('style-loader'),
+              {
+                loader:require.resolve('css-loader'),
+                options:{
+                  importLoaders:1,
+                },
+              },
+              {
+                loader:require.resolve('less-loader'),
+                options:{
+                  importLoaders:1,
+                },
+              },
+            ],
             sideEffects: true,
           },
           // Adds support for CSS Modules (https://github.com/css-modules/css-modules)
